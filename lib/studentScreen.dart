@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:student_flutter_app/add_screen.dart';
 import 'package:student_flutter_app/edit_screen.dart';
+import 'package:student_flutter_app/add_screen.dart';
 import 'package:student_flutter_app/student.dart';
 
 
@@ -14,6 +14,12 @@ class Studentscreen extends StatefulWidget {
 class _StudentscreenState extends State<Studentscreen> {
   @override
   Widget build(BuildContext context) {
+
+    Student.updateStudentItem = (){
+      setState(() {
+        Student.countItem = Student.studentItems.length;
+      });
+    };
     return Scaffold(
       body: SafeArea(child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,6 +72,7 @@ class _StudentscreenState extends State<Studentscreen> {
       itemBuilder: (ctx, index){
         return Column(
           children: [
+            //ลบรายการในแถวที่เลื่อนจากขวาไปซ้าย end to start 
             Dismissible(key: Key(Student.studentItems[index]['id']),
             background: Container(
               decoration: const BoxDecoration(color: Colors.pink),

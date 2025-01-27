@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_flutter_app/student.dart';
 
 class EditScreen extends StatefulWidget {
   final int index;
@@ -9,111 +10,135 @@ class EditScreen extends StatefulWidget {
 }
 
 class _EditScreenState extends State<EditScreen> {
-  final _fromkey = GlobalKey<FormState>();
-  String _id = '', _name = '';
-  int _score = 0;
-  String? _gender;
-  
-  final List<String> titleList = ['นาย', 'นางสาว']; 
+  var nameController = TextEditingController();
+  var idController = TextEditingController();
+  var scoreController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('บันทึกข้อมูลนักศึกษา'),),
-      body: Container(
-        padding: const EdgeInsets.all(30),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(width: 0),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30)
-          )
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 30,),
-            const Text('เพิ่มรายชื่อนักศึกษา',style: TextStyle(color: Colors.pinkAccent,fontSize: 30,fontWeight: FontWeight.bold),),
-            const SizedBox(height: 20,),
-            Form(
-              key: _fromkey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    maxLength: 13,
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(color: Colors.black),
-                    decoration: const InputDecoration(
-                      label: Text('รหัสนักศึกษา',style: TextStyle(fontSize: 16),)
-                    ),
-                    validator: (value) {
-                      if(value==null || value.isEmpty){
-                        return 'กรุณาป้อนรหัส';
-                      }
-                      return null;
-                    },
-                    onSaved: (value){
-                      _id = value.toString();
-                    },
-                  ),
-                  const SizedBox(height: 20,),
-                  DropdownButtonFormField(
-                    value: _gender,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      label: Text('คำนำหน้า',style: TextStyle(fontSize: 16),)
-                    ),
-                    items: titleList.map((item){
-                      return DropdownMenuItem(
-                        value: item,
-                        child: Text(item, style: const TextStyle(color: Colors.pink)));
-                    }).toList(),
-                    onChanged: (value){
-                      setState(() {
-                        _gender = value!;
-                      });
-                    },
-                    validator: (value){
-                      if(value==null){
-                        return 'กรุณาเลือกคำนำหน้า';
-                      }
-                      return null;
-                    },
-                    ),
-                    const SizedBox(height: 20,),
-                    TextFormField(
-                      maxLength: 20,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        label: Text('ชื่อ',style: TextStyle(fontSize: 16),)
-                      ),
-                      validator: (value){
-                        return (value==null||value.isEmpty)?'กรุณากรอกชื่อ':null;
-                      },
-                      onSaved: (value){
-                        _name = value!;
-                      },
-                    ),
-                    const SizedBox(height: 20,),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        label: Text('คะเเนน',style: TextStyle(fontSize: 16),)
-                      ),
-                      validator: (value){
-                        return (value==null||value.isEmpty)?'กรุณากรอกคะเเนน':null;
-                      },
-                      onSaved: (value){
-                        _score = int.parse(value.toString());
-                      },
-                    ),
-                ],
+    var numItem = widget.index;
+    if(numItem >= 0){
+      idController.text = Student.studentItems[numItem]['id'];
+      nameController.text = Student.studentItems[numItem]['name'];
+      scoreController.text = Student.studentItems[numItem]['score'].toString();
+
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(30),
+      decoration: BoxDecoration(
+        color:  Colors.white,
+        border: Border.all(width: 0),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30)
+        )
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          TextField(
+            controller: idController,
+            style: const TextStyle(color: Colors.black, fontSize: 16),
+            decoration: const InputDecoration(
+              labelText: 'รหัสนักศึกษา',
+              focusColor: Colors.pink,
+              labelStyle: TextStyle(
+                decorationColor: Colors.red,
+                color: Colors.blue,
+                fontSize: 20
+
+              ),
+              icon: Icon(Icons.code_sharp,color: Colors.blueGrey,size: 30,),
+              fillColor: Colors.blueGrey,
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueGrey,style: BorderStyle.solid),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.pinkAccent)
               )
-            )
-          ],
-        ),
+
+            ),
+          ),
+          const SizedBox(height: 20,),
+          TextField(
+            controller: nameController,
+            style: const TextStyle(color: Colors.black, fontSize: 16),
+            decoration: const InputDecoration(
+              labelText: 'ชื่อนักศึกษา',
+              focusColor: Colors.pink,
+              labelStyle: TextStyle(
+                decorationColor: Colors.red,
+                color: Colors.blue,
+                fontSize: 20
+
+              ),
+              icon: Icon(Icons.person_outline,color: Colors.blueGrey,size: 30,),
+              fillColor: Colors.blueGrey,
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueGrey,style: BorderStyle.solid),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.pinkAccent)
+              )
+
+            ),
+          ),
+          const SizedBox(height: 20,),
+          TextField(
+            controller: scoreController,
+            style: const TextStyle(color: Colors.black, fontSize: 16),
+            decoration: const InputDecoration(
+              labelText: 'คะแนน',
+              focusColor: Colors.pink,
+              labelStyle: TextStyle(
+                decorationColor: Colors.red,
+                color: Colors.blue,
+                fontSize: 20
+
+              ),
+              icon: Icon(Icons.score_outlined,color: Colors.blueGrey,size: 30,),
+              fillColor: Colors.blueGrey,
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueGrey,style: BorderStyle.solid),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.pinkAccent)
+              )
+
+            ),
+          ),
+          const SizedBox(height: 30,),
+          buildButton(),
+        ],
       ),
     );
+  }
+  Widget buildButton(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          onPressed: (){
+            Navigator.of(context).pop();
+          }, 
+          child: const Text('ยกเลิก',
+          style: TextStyle (fontWeight: FontWeight.bold, fontSize: 16),),
+        ),
+        const SizedBox(width: 20,),
+        ElevatedButton(
+          onPressed: (){
+            setState(() {
+              Student.studentItems[widget.index]['id']=idController.text;
+              Student.studentItems[widget.index]['name']=nameController.text;
+              Student.studentItems[widget.index]['score']=int.parse(scoreController.text);
+              Student.updateStudentItem();
+            });
+            Navigator.of(context).pop();
+          }, 
+          child: const Text('แก้ไข',
+          style: TextStyle (fontWeight: FontWeight.bold, fontSize: 16),),
+        ),
+      ],);
   }
 }
